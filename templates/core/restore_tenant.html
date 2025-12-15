@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Restore Tenant - RENTRIX{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0 fw-semibold">Restore {{ assignment.tenant.get_full_name }} to a Room</h5>
+                <a href="javascript:history.back()" class="btn-back-arrow" title="Back">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="previous_room_id" value="{{ assignment.room.id }}">
+                    <div class="mb-4">
+                        <label for="room_id" class="form-label">Select Room</label>
+                        <select id="room_id" name="room_id" class="form-select" required>
+                            <option value="" selected disabled>Choose a room</option>
+                            {% for r in rooms %}
+                                <option value="{{ r.id }}">Room {{ r.room_number }} ({{ r.current_occupants }}/{{ r.capacity }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Restore</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

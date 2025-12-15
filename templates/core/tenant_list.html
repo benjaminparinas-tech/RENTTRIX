@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Tenants - RENTRIX{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Tenants</h1>
+            <div class="d-flex gap-2 align-items-center">
+                <a href="{% url 'tenant_create' %}" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Create Tenant
+                </a>
+                <a href="{% url 'archived_tenants' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-archive"></i> View Archived Tenants
+                </a>
+            </div>
+        </div>
+        {# Filtering handled by global navbar search now #}
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        {% if tenants %}
+            <div class="table-responsive">
+                <table class="table table-hover tenant-list-table">
+                    <thead>
+                        <tr>
+                            <th class="col-name">Name</th>
+                            <th class="col-email">Email</th>
+                            <th class="col-room">Room</th>
+                            <th class="col-date">Move-in Date</th>
+                            <th class="col-status">Status</th>
+                            <th class="col-actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tenant in tenants %}
+                        <tr>
+                            <td class="col-name">
+                                <div class="tenant-name">{{ tenant.tenant.get_full_name|default:tenant.tenant.username }}</div>
+                            </td>
+                            <td class="col-email">
+                                <div class="tenant-email">{{ tenant.tenant.email }}</div>
+                            </td>
+                            <td class="col-room">
+                                <span class="room-number">{{ tenant.room.room_number }}</span>
+                            </td>
+                            <td class="col-date">
+                                <span class="move-in-date">{{ tenant.move_in_date|date:"M d, Y" }}</span>
+                            </td>
+                            <td class="col-status">
+                                <span class="badge status-{{ tenant.status }}">
+                                    {{ tenant.status|title }}
+                                </span>
+                            </td>
+                            <td class="col-actions">
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if tenant.status == 'active' %}
+                                    <a href="{% url 'roomtenant_edit' tenant.room.id tenant.id %}" class="btn-icon-edit" title="Edit assignment & Add-ons">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form method="post" action="{% url 'roomtenant_archive' tenant.room.id tenant.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-icon-edit text-muted" title="Archive tenant">
+                                            <i class="fas fa-archive"></i>
+                                        </button>
+                                    </form>
+                                    <a href="{% url 'tenant_payment_history' tenant.tenant.id %}" class="btn-icon-edit" title="View payment history">
+                                        <i class="fas fa-history"></i>
+                                    </a>
+                                    <a href="{% url 'add_payment' tenant.tenant.id %}" class="btn-icon-edit icon-success" title="Add payment">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                    </a>
+                                    {% else %}
+                                    <a href="#" class="btn-icon-edit btn-icon-disabled" aria-disabled="true" tabindex="-1" title="Edit assignment & Add-ons">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" class="btn-icon-edit text-muted btn-icon-disabled" aria-disabled="true" title="Archive tenant">
+                                        <i class="fas fa-archive"></i>
+                                    </button>
+                                    <a href="{% url 'tenant_payment_history' tenant.tenant.id %}" class="btn-icon-edit" title="View payment history">
+                                        <i class="fas fa-history"></i>
+                                    </a>
+                                    <a href="#" class="btn-icon-edit icon-success btn-icon-disabled" aria-disabled="true" tabindex="-1" title="Add payment">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted">No tenants found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

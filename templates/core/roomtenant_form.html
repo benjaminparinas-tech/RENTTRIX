@@ -1,0 +1,399 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if assignment %}Edit Assignment{% else %}Add Tenant{% endif %} - RENTRIX{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">{% if assignment %}Edit Assignment{% else %}Add Tenant{% endif %} - Room {{ room.room_number }}</h1>
+            <a href="javascript:history.back()" class="btn-back-arrow" title="Back">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% if assignment %}
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="mb-0 fw-semibold">Edit Assignment</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="save_assignment" value="1">
+                        <div class="mb-3">
+                            <label class="form-label" for="{{ form.tenant.id_for_label }}">{{ form.tenant.label }}</label>
+                            {{ form.tenant }}
+                            {% for error in form.tenant.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="{{ form.room.id_for_label }}">{{ form.room.label }}</label>
+                            {{ form.room }}
+                            {% for error in form.room.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="{{ form.move_in_date.id_for_label }}">{{ form.move_in_date.label }}</label>
+                            {{ form.move_in_date }}
+                            {% for error in form.move_in_date.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Save Assignment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="mb-0 fw-semibold">Add Add-on</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="add_addon" value="1">
+                        <div class="mb-3">
+                            <label class="form-label" for="{{ addon_form.description.id_for_label }}">{{ addon_form.description.label }}</label>
+                            {{ addon_form.description }}
+                            {% for error in addon_form.description.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="{{ addon_form.amount.id_for_label }}">{{ addon_form.amount.label }}</label>
+                            {{ addon_form.amount }}
+                            {% for error in addon_form.amount.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Add Add-on</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="mb-0 fw-semibold">Current Add-ons</h5>
+                </div>
+                <div class="card-body p-4">
+                    {% if addons %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for addon in addons %}
+                                    <tr>
+                                        <td>{{ addon.description }}</td>
+                                        <td>₱{{ addon.amount|floatformat:2 }}</td>
+                                        <td>
+                                            <form method="post" action="{% url 'addon_delete' room.id assignment.id addon.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this add-on?');">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No add-ons added yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="mb-0 fw-semibold">Add Tenant</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="save_assignment" value="1">
+                        <div class="mb-3">
+                            <label class="form-label" for="{{ form.tenant.id_for_label }}">{{ form.tenant.label }}</label>
+                            {{ form.tenant }}
+                            {% for error in form.tenant.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="{{ form.room.id_for_label }}">{{ form.room.label }}</label>
+                            {{ form.room }}
+                            {% for error in form.room.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="{{ form.move_in_date.id_for_label }}">{{ form.move_in_date.label }}</label>
+                            {{ form.move_in_date }}
+                            {% for error in form.move_in_date.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Create Assignment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom py-3">
+                <h5 class="mb-0 fw-semibold">Edit Assignment</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="save_assignment" value="1">
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.tenant.id_for_label }}">{{ form.tenant.label }}</label>
+                        {{ form.tenant }}
+                        {% for error in form.tenant.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.room.id_for_label }}">{{ form.room.label }}</label>
+                        {{ form.room }}
+                        {% for error in form.room.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="{{ form.move_in_date.id_for_label }}">{{ form.move_in_date.label }}</label>
+                        {{ form.move_in_date }}
+                        {% for error in form.move_in_date.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Save Assignment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom py-3">
+                <h5 class="mb-0 fw-semibold">Add Add-on</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="add_addon" value="1">
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ addon_form.description.id_for_label }}">{{ addon_form.description.label }}</label>
+                        {{ addon_form.description }}
+                        {% for error in addon_form.description.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="{{ addon_form.amount.id_for_label }}">{{ addon_form.amount.label }}</label>
+                        {{ addon_form.amount }}
+                        {% for error in addon_form.amount.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Add Add-on</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom py-3">
+                <h5 class="mb-0 fw-semibold">Current Add-ons</h5>
+            </div>
+            <div class="card-body p-4">
+                {% if addons %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for addon in addons %}
+                                <tr>
+                                    <td>{{ addon.description }}</td>
+                                    <td>₱{{ addon.amount|floatformat:2 }}</td>
+                                    <td>
+                                        <form method="post" action="{% url 'addon_delete' room.id assignment.id addon.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this add-on?');">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">No add-ons added yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom py-3">
+                <h5 class="mb-0 fw-semibold">Add Tenant</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="save_assignment" value="1">
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.tenant.id_for_label }}">{{ form.tenant.label }}</label>
+                        {{ form.tenant }}
+                        {% for error in form.tenant.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.room.id_for_label }}">{{ form.room.label }}</label>
+                        {{ form.room }}
+                        {% for error in form.room.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="{{ form.move_in_date.id_for_label }}">{{ form.move_in_date.label }}</label>
+                        {{ form.move_in_date }}
+                        {% for error in form.move_in_date.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Create Assignment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+    {% else %}
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom py-3">
+                <h5 class="mb-0 fw-semibold">{% if assignment %}Edit Assignment{% else %}Add Tenant{% endif %}</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="save_assignment" value="1">
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.tenant.id_for_label }}">{{ form.tenant.label }}</label>
+                        {{ form.tenant }}
+                        {% for error in form.tenant.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.room.id_for_label }}">{{ form.room.label }}</label>
+                        {{ form.room }}
+                        {% for error in form.room.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="{{ form.move_in_date.id_for_label }}">{{ form.move_in_date.label }}</label>
+                        {{ form.move_in_date }}
+                        {% for error in form.move_in_date.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Create Assignment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" for="{{ addon_form.amount.id_for_label }}">{{ addon_form.amount.label }}</label>
+                        {{ addon_form.amount }}
+                        {% for error in addon_form.amount.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Add Add-on</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom py-3">
+                <h5 class="mb-0 fw-semibold">Current Add-ons</h5>
+            </div>
+            <div class="card-body p-4">
+                {% if addons %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for addon in addons %}
+                                <tr>
+                                    <td>{{ addon.description }}</td>
+                                    <td>₱{{ addon.amount|floatformat:2 }}</td>
+                                    <td>
+                                        <form method="post" action="{% url 'addon_delete' room.id assignment.id addon.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this add-on?');">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">No add-ons added yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+

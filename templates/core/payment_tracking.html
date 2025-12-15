@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load core_extras %}
+
+{% block title %}Payment Tracking - RENTRIX{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">Payment Tracking</h1>
+            <form method="get" class="d-flex align-items-center mb-0">
+                <select name="year" class="form-select payment-year-select me-2" onchange="this.form.submit()">
+                    {% for year in available_years %}
+                        <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+                <button id="add-year-btn" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" style="width: 30px; height: 30px; border-radius: 50%;">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="card payment-tracking-card">
+    <div class="card-body">
+        {% if active_tenants %}
+            <div class="table-responsive">
+                <table class="table table-hover payment-tracking-table">
+                    <thead>
+                        <tr>
+                            <th class="col-room">Room</th>
+                            <th class="col-tenant">Tenant</th>
+                            <th class="col-addon-item">Add-on Item</th>
+                            <th class="col-addon-amount">Amount</th>
+                            {% for month in months %}
+                                <th class="col-month">{{ month|slice:":3" }}</th>
+                            {% endfor %}
+                            <th class="col-action">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tenant in active_tenants %}
+                        <tr>
+                            <td class="col-room">
+                                <span class="room-number">{{ tenant.room.room_number }}</span>
+                            </td>
+                            <td class="col-tenant">
+                                <div class="tenant-name">{{ tenant.tenant.get_full_name|default:tenant.tenant.username }}</div>
+                            </td>
+                            <td class="col-addon-item">
+                                {% with addons=tenant.addons.all %}
+                                    {% if addons %}
+                                        {% for addon in addons %}
+                                            <div class="addon-item-row">
+                                                <span class="addon-description">{{ addon.description }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                            <td class="col-addon-amount">
+                                {% with addons=tenant.addons.all %}
+                                    {% if addons %}
+                                        {% for addon in addons %}
+                                            <div class="addon-item-row">
+                                                <span class="addon-amount">₱{{ addon.amount|floatformat:0 }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                            {% for month in months %}
+                                {% with month_num=forloop.counter %}
+                                    {% if payment_status|get_item:tenant.tenant.id|get_item:month_num == 'invalid' %}
+                                        <td class="col-month text-muted">N/A</td>
+                                    {% else %}
+                                        {% if tenant.move_in_date.year > selected_year or tenant.move_in_date.year == selected_year and tenant.move_in_date.month > month_num %}
+                                            <td class="col-month text-muted">-</td>
+                                        {% else %}
+                                            {% with status=payment_status|get_item:tenant.tenant.id|get_item:month_num %}
+                                                {% if status == 'paid' %}
+                                                    <td class="col-month">
+                                                        <span class="status-paid payment-status-badge">
+                                                            Paid
+                                                        </span>
+                                                    </td>
+                                                {% else %}
+                                                    <td class="col-month">
+                                                        <span class="status-unpaid payment-status-badge">
+                                                            Unpaid
+                                                        </span>
+                                                    </td>
+                                                {% endif %}
+                                            {% endwith %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endwith %}
+                            {% endfor %}
+                            <td class="col-action">
+                                <a href="{% url 'add_payment' tenant.tenant.id %}" class="btn-icon-edit icon-success" title="Add payment">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted text-center py-4">No active tenants found.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    document.getElementById('add-year-btn').addEventListener('click', function(event) {
+        event.preventDefault();
+        const yearSelect = document.querySelector('.payment-year-select');
+        const lastYear = parseInt(yearSelect.options[yearSelect.options.length - 1].value);
+        const newYear = lastYear + 1;
+
+        // Check if the year already exists
+        const existingOption = Array.from(yearSelect.options).find(option => parseInt(option.value) === newYear);
+        if (!existingOption) {
+            const newOption = document.createElement('option');
+            newOption.value = newYear;
+            newOption.textContent = newYear;
+            yearSelect.appendChild(newOption);
+        }
+
+        yearSelect.value = newYear;
+        yearSelect.form.submit();
+    });
+</script>
+
+{% endblock %}

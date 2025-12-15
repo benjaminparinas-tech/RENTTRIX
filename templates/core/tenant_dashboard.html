@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Tenant {{ tenant_name }} Dashboard - RENTRIX{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">Tenant {{ tenant_name }} Dashboard</h1>
+    </div>
+</div>
+
+{% if room_assignment %}
+    <!-- Room Information -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header">
+                    <h5 class="mb-0">Room Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Room Number:</strong> {{ room_assignment.room.room_number }}</p>
+                    <p><strong>Move-in Date:</strong> {{ room_assignment.move_in_date|date:"F d, Y" }}</p>
+                    <p><strong>Status:</strong> 
+                        <span class="badge status-{{ room_assignment.room.status }}">
+                            {{ room_assignment.room.status|title }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Payments -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Payments</h5>
+                </div>
+                <div class="card-body">
+                    {% if payments %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Receipt No.</th>
+                                        <th>Amount</th>
+                                        <th>Month</th>
+                                        <th>Date Paid</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for payment in payments %}
+                                    <tr>
+                                        <td>{{ payment.receipt_number }}</td>
+                                        <td>₱{{ payment.amount }}</td>
+                                        <td>{{ payment.payment_month|date:"F Y" }}</td>
+                                        <td>{{ payment.payment_date|date:"M d, Y" }}</td>
+                                        <td>
+                                            <span class="badge status-{{ payment.status }}">
+                                                {{ payment.status|title }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if payment.status == 'paid' %}
+                                                <a href="{% url 'download_receipt' payment.receipt.id %}" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-download"></i> Download Receipt
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No payment history found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <h4 class="alert-heading">No Room Assignment</h4>
+        <p>You haven't been assigned to a room yet. Please contact the landlord for room assignment.</p>
+    </div>
+{% endif %}
+{% endblock %} 

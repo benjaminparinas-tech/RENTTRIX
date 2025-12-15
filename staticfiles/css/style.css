@@ -1,0 +1,1001 @@
+/* General Styles */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    color: #181818;
+    font-family: 'Inter', Arial, sans-serif;
+    letter-spacing: 0.01em;
+    line-height: 1.6;
+}
+
+main {
+    flex: 1;
+}
+
+/* Typography */
+h1, h2, h3 {
+    color: #181818;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+}
+
+h4, h5, h6 {
+    color: #181818;
+    font-weight: 700;
+    letter-spacing: 0.15px;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+}
+
+p {
+    color: #374151; /* gray-700 */
+    margin-bottom: 0.9rem;
+}
+
+.text-muted {
+    color: #6b7280 !important; /* gray-500 */
+}
+
+.lead {
+    font-size: 1.125rem;
+    color: #374151;
+}
+
+/* Card Styles - Orange Border Accent (RENTRIX Global Theme) */
+/* Ensure ALL cards have orange top border accent, matching payment tracking forms */
+.card, 
+.modal-content {
+    box-shadow: 0 6px 32px rgba(24,24,24,0.10);
+    transition: all 0.3s ease;
+    background: #fff;
+    border-radius: 22px;
+    border-top: 5px solid #ff8800 !important;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem 1.5rem 1.2rem 1.5rem;
+}
+
+.card:hover {
+    box-shadow: 0 10px 28px rgba(24,24,24,0.16);
+    transform: translateY(-2px);
+}
+
+/* Room Status Badges - minimal & modern */
+.status-vacant, .status-full {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    padding: 0.22em 0.6em !important;
+    border-radius: 999px !important;
+    font-weight: 500 !important;
+    font-size: 0.85em !important;
+    line-height: 1.2;
+    background: transparent !important;
+}
+
+.status-vacant {
+    color: #ff8800 !important;
+    border: 1px solid rgba(255, 136, 0, 0.5) !important;
+}
+
+.status-full {
+    color: #6b7280 !important; /* gray-500 */
+    border: 1px solid #e5e7eb !important; /* gray-200 */
+    background: rgba(17, 24, 39, 0.02) !important; /* subtle */
+}
+
+.status-vacant::before, .status-full::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    display: inline-block;
+}
+
+/* Payment Status Badges */
+.status-paid,
+.status-active {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    padding: 0.28em 0.7em !important;
+    border-radius: 999px !important;
+    font-weight: 600 !important;
+    font-size: 0.85em !important;
+    line-height: 1.2;
+    color: #fff !important;
+    background: linear-gradient(135deg, #ff8800, #ff6b00) !important;
+    border: 1px solid rgba(255,136,0,0.45) !important;
+    box-shadow: 0 4px 12px rgba(255,136,0,0.18);
+}
+
+.status-unpaid,
+.status-inactive {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    padding: 0.28em 0.7em !important;
+    border-radius: 999px !important;
+    font-weight: 600 !important;
+    font-size: 0.85em !important;
+    line-height: 1.2;
+    color: #6b7280 !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+.status-paid::before,
+.status-active::before,
+.status-unpaid::before,
+.status-inactive::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    display: inline-block;
+}
+
+/* Table Styles */
+.table-hover tbody tr:hover {
+    background-color: rgba(255,136,0,0.10);
+}
+
+/* Payment Tracking Styles */
+.payment-tracking-card {
+    margin-bottom: 2.5rem;
+}
+
+.payment-year-select {
+    min-width: 120px;
+}
+
+.payment-tracking-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 0;
+}
+
+.payment-tracking-table thead th {
+    padding: 1rem 0.5rem;
+    font-weight: 600;
+    white-space: nowrap;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 0.9em;
+    background: #ffffff;
+    color: #181818;
+    border-bottom: 2px solid #f3f4f6;
+}
+
+.payment-tracking-table thead th.col-room,
+.payment-tracking-table thead th.col-tenant {
+    text-align: left;
+}
+
+.payment-tracking-table tbody td {
+    padding: 0.875rem 0.5rem;
+    vertical-align: middle;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+.payment-tracking-table tbody td.col-room,
+.payment-tracking-table tbody td.col-tenant {
+    text-align: left;
+}
+
+.payment-tracking-table .col-room {
+    width: 80px;
+    min-width: 80px;
+}
+
+.payment-tracking-table .col-room {
+    width: 70px;
+    min-width: 65px;
+    padding-left: 0;
+    padding-right: 0.35rem;
+}
+
+.payment-tracking-table .col-tenant {
+    width: 180px;
+    min-width: 150px;
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
+}
+
+.payment-tracking-table .col-addon-item {
+    width: 120px;
+    min-width: 100px;
+    text-align: left;
+    padding: 0.875rem 0.5rem;
+    vertical-align: middle;
+}
+
+.payment-tracking-table .col-addon-amount {
+    width: 90px;
+    min-width: 80px;
+    text-align: center;
+    padding: 0.875rem 0.5rem;
+    vertical-align: middle;
+}
+
+.payment-tracking-table .addon-item-row {
+    margin-bottom: 0.5rem;
+}
+
+.payment-tracking-table .addon-item-row:last-child {
+    margin-bottom: 0;
+}
+
+.payment-tracking-table .addon-description {
+    font-size: 0.85em;
+    color: #181818;
+    line-height: 1.3;
+}
+
+.payment-tracking-table .addon-amount {
+    font-weight: 600;
+    color: #ff8800;
+    font-size: 0.9em;
+}
+
+.payment-tracking-table .col-month {
+    width: 58px;
+    min-width: 52px;
+    padding: 0.75rem 0.18rem;
+}
+
+
+.payment-tracking-table .col-action {
+    width: 60px;
+    min-width: 60px;
+    text-align: center;
+}
+
+.payment-status-badge {
+    display: inline-block;
+    padding: 0.22em 0.5em;
+    border-radius: 999px;
+    font-size: 0.75em;
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.payment-tracking-table .room-number {
+    font-weight: 600;
+    color: #181818;
+}
+
+.payment-tracking-table .tenant-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    color: #181818;
+}
+
+
+/* Responsive adjustments for payment tracking */
+@media (max-width: 1200px) {
+    .payment-tracking-table .col-tenant {
+        width: 170px;
+        min-width: 140px;
+    }
+    
+    .payment-tracking-table .col-month {
+        width: 52px;
+        min-width: 45px;
+        padding: 0.68rem 0.15rem;
+    }
+    
+    .payment-status-badge {
+        font-size: 0.75em;
+        padding: 0.25em 0.5em;
+    }
+}
+
+@media (max-width: 768px) {
+    .payment-tracking-table thead th,
+    .payment-tracking-table tbody td {
+        padding: 0.75rem 0.4rem;
+        font-size: 0.85em;
+    }
+    
+    .payment-tracking-table .col-room {
+        width: 58px;
+        min-width: 55px;
+    }
+    
+    .payment-tracking-table .col-tenant {
+        width: 100px;
+        min-width: 85px;
+    }
+    
+    .payment-tracking-table .col-addon-item {
+        width: 85px;
+        min-width: 75px;
+        font-size: 0.8em;
+    }
+    
+    .payment-tracking-table .col-addon-amount {
+        width: 70px;
+        min-width: 60px;
+        font-size: 0.8em;
+    }
+    
+    .payment-tracking-table .col-month {
+        width: 44px;
+        min-width: 38px;
+        padding: 0.6rem 0.1rem;
+    }
+    
+    .payment-status-badge {
+        font-size: 0.7em;
+        padding: 0.2em 0.4em;
+    }
+    
+    .payment-year-select {
+        min-width: 100px;
+    }
+}
+
+/* Tenant List Table Specific Styles */
+.tenant-list-table {
+    width: 100%;
+    table-layout: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 0;
+}
+
+.tenant-list-table thead th {
+    padding: 1rem 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.tenant-list-table tbody td {
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+    border-top: 1px solid #e5e7eb;
+}
+
+.tenant-list-table .col-name {
+    min-width: 150px;
+    max-width: 200px;
+}
+
+.tenant-list-table .col-email {
+    min-width: 180px;
+    max-width: 250px;
+}
+
+.tenant-list-table .col-room {
+    min-width: 80px;
+    width: 100px;
+    text-align: center;
+}
+
+.tenant-list-table .col-date {
+    min-width: 120px;
+    width: 130px;
+    white-space: nowrap;
+}
+
+.tenant-list-table .col-status {
+    min-width: 90px;
+    width: 100px;
+    text-align: center;
+}
+
+.tenant-list-table .col-actions {
+    min-width: 180px;
+    width: 200px;
+    white-space: nowrap;
+}
+
+.tenant-list-table .col-actions .d-flex {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+
+.tenant-name,
+.tenant-email {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.room-number {
+    font-weight: 500;
+    color: #181818;
+}
+
+.move-in-date {
+    color: #6b7280;
+    font-size: 0.95em;
+}
+
+/* Responsive adjustments for tenant list */
+@media (max-width: 992px) {
+    .tenant-list-table .col-email {
+        min-width: 150px;
+        max-width: 200px;
+    }
+    
+    .tenant-list-table .col-actions {
+        min-width: 160px;
+    }
+}
+
+@media (max-width: 768px) {
+    .tenant-list-table thead th,
+    .tenant-list-table tbody td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.9em;
+    }
+    
+    .tenant-list-table .col-name {
+        min-width: 120px;
+        max-width: 150px;
+    }
+    
+    .tenant-list-table .col-email {
+        min-width: 140px;
+        max-width: 180px;
+    }
+    
+    .tenant-list-table .col-actions {
+        min-width: 140px;
+    }
+    
+    .btn-icon-edit {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .btn-icon-edit i {
+        font-size: 0.85em;
+    }
+}
+
+/* Form Styles - Orange Accent (System-wide RENTRIX Theme - Matching Payment Tracking) */
+/* High specificity to override Bootstrap - Applied to ALL form elements globally */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="month"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="file"],
+input[type="url"],
+input[type="tel"],
+input[type="search"],
+select,
+textarea,
+.form-control,
+.form-select,
+.payment-year-select,
+input.form-control,
+select.form-select {
+    border-radius: 8px !important;
+    border: 1.5px solid rgba(255, 136, 0, 0.3) !important;
+    font-size: 0.95rem !important;
+    padding: 0.75rem 1rem !important;
+    background: #fff !important;
+    color: #181818 !important;
+    transition: all 0.2s ease !important;
+}
+
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="password"]:hover,
+input[type="number"]:hover,
+input[type="month"]:hover,
+input[type="date"]:hover,
+input[type="time"]:hover,
+input[type="datetime-local"]:hover,
+input[type="file"]:hover,
+input[type="url"]:hover,
+input[type="tel"]:hover,
+input[type="search"]:hover,
+select:hover,
+textarea:hover,
+.form-control:hover,
+.form-select:hover,
+.payment-year-select:hover,
+input.form-control:hover,
+select.form-select:hover {
+    border-color: rgba(255, 136, 0, 0.6) !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="month"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="datetime-local"]:focus,
+input[type="file"]:focus,
+input[type="url"]:focus,
+input[type="tel"]:focus,
+input[type="search"]:focus,
+select:focus,
+textarea:focus,
+.form-control:focus,
+.form-select:focus,
+.payment-year-select:focus,
+input.form-control:focus,
+select.form-select:focus {
+    border-color: #ff8800 !important;
+    box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.15) !important;
+    outline: none !important;
+}
+
+/* Button Styles */
+.btn {
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    border-radius: 14px;
+}
+
+.btn:hover {
+    outline: none !important; /* no blue outline on hover */
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn:focus-visible {
+    outline: none !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important; /* subtle elevation, no colored ring */
+}
+.btn-primary {
+    background: linear-gradient(135deg, #ff8800, #ff6b00);
+    color: #fff;
+    border: 1px solid rgba(255,136,0,0.35);
+    border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(255,136,0,0.20);
+    font-weight: 700;
+    font-size: 1.05em;
+    padding: 0.7em 1.4em;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.02) saturate(1.05);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(255,136,0,0.28);
+}
+
+.btn-primary:focus, .btn-primary:active {
+    background: linear-gradient(135deg, #ff8800, #ff6b00) !important;
+    color: #fff !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.14) !important;
+    outline: none !important;
+}
+
+.btn-outline-primary {
+    border: 1.5px solid rgba(255,136,0,0.55);
+    color: #ff6b00;
+    background: rgba(255,136,0,0.06);
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 1.05em;
+    padding: 0.7em 1.4em;
+    backdrop-filter: blur(2px);
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, rgba(255,136,0,0.14), rgba(255,107,0,0.14));
+    color: #ff6b00;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(255,136,0,0.18);
+}
+
+.btn-outline-primary:focus, .btn-outline-primary:active {
+    background: rgba(255,136,0,0.10) !important;
+    color: #ff6b00 !important;
+    border-color: rgba(255,136,0,0.65) !important;
+    outline: none !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* Hover/active refinements for other Bootstrap variants used in app */
+.btn-success, .btn-info, .btn-secondary, .btn-danger, .btn-warning {
+    border-radius: 14px;
+}
+
+.btn-success:hover, .btn-info:hover, .btn-secondary:hover, .btn-danger:hover, .btn-warning:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.btn-success:active, .btn-info:active, .btn-secondary:active, .btn-danger:active, .btn-warning:active,
+.btn-success:focus, .btn-info:focus, .btn-secondary:focus, .btn-danger:focus, .btn-warning:focus {
+    outline: none !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
+}
+
+.btn-primary:active, .btn-outline-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 16px rgba(255,136,0,0.2);
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+    border-radius: 22px;
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    margin-bottom: 2.5rem;
+    border-top: 5px solid #ff8800;
+    background: #fff;
+    color: #181818;
+    box-shadow: 0 6px 32px rgba(24,24,24,0.10);
+}
+
+.dashboard-card .icon {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+    color: #ff8800;
+}
+
+/* Receipt Styles */
+.receipt {
+    background-color: #fff;
+    padding: 28px;
+    border: 2.5px solid #181818;
+    border-radius: 18px;
+    box-shadow: 0 6px 32px rgba(24,24,24,0.10);
+}
+
+.receipt-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.receipt-details {
+    margin: 24px 0;
+}
+
+.receipt-footer {
+    margin-top: 24px;
+    text-align: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .dashboard-card {
+        margin-bottom: 15px;
+        padding: 1.2rem 0.7rem 1rem 0.7rem;
+    }
+    
+    .table-responsive {
+        margin-bottom: 15px;
+    }
+    .card, .modal-content {
+        padding: 1rem 0.5rem 0.7rem 0.5rem;
+    }
+    
+    .room-card .card-body {
+        padding: 1.25rem 1rem 1rem 1rem;
+    }
+    
+    .room-card .card-title {
+        font-size: 1.3rem;
+    }
+    
+    .btn-see-details {
+        font-size: 0.85em;
+        padding: 0.4rem 0.85rem;
+    }
+}
+
+.navbar, .footer {
+    background: #181818 !important;
+    color: #fff;
+    border-radius: 0 0 18px 18px;
+    box-shadow: 0 4px 24px rgba(24,24,24,0.10);
+}
+
+.navbar .nav-link, .footer {
+    color: #fff !important;
+    font-size: 1.08em;
+    letter-spacing: 0.04em;
+}
+
+.navbar .nav-link.active, .navbar .nav-link:hover {
+    color: #ff8800 !important;
+    border-bottom: 1px solid rgba(255,136,0,0.6);
+    background: rgba(255,136,0,0.10);
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(255,136,0,0.12);
+    transform: translateY(-1px);
+}
+
+a, .link-orange {
+    color: #ff8800;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover, .link-orange:hover {
+    color: #181818;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
+
+.table thead {
+    background: #181818;
+    color: #fff;
+    border-bottom: 2px solid #ff8800;
+    font-size: 1.08em;
+}
+
+.badge {
+    border-radius: 999px;
+    font-size: 0.9em;
+    padding: 0.28em 0.8em;
+    font-weight: 600;
+}
+
+.form-label {
+    color: #181818;
+    font-weight: 500;
+    margin-bottom: 0.4em;
+}
+
+.alert {
+    border-radius: 14px;
+    font-size: 1.08em;
+    padding: 1em 1.5em;
+    margin-bottom: 1.5em;
+}
+
+.alert-success, .alert-info {
+    background: #fff7e6;
+    color: #181818;
+    border: 1.5px solid #ff8800;
+}
+
+.alert-danger, .alert-error {
+    background: #181818;
+    color: #fff;
+    border: 1.5px solid #ff8800;
+} 
+
+/* Room Card Specific Styles */
+.room-card {
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.room-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(24,24,24,0.15);
+}
+
+.room-card .card-body {
+    padding: 1.5rem 1.5rem 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.room-card .card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #181818;
+    margin-bottom: 0;
+}
+
+/* Room info rows spacing */
+.room-card .d-flex.justify-content-between {
+    min-height: 32px;
+    align-items: center;
+}
+
+/* Capacity Badge */
+.capacity-badge {
+    background: rgba(255,136,0,0.10) !important;
+    color: #ff6b00 !important;
+    border: 1px solid rgba(255,136,0,0.35) !important;
+    font-weight: 600;
+    font-size: 0.9em;
+    padding: 0.4em 0.8em;
+}
+
+/* Card actions in room list */
+.card-actions {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-icon-edit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    border: 1.5px solid #e5e7eb;
+    color: #6b7280;
+    background: #ffffff;
+    transition: transform .2s ease, box-shadow .2s ease, color .2s ease, border-color .2s ease, background .2s ease;
+    text-decoration: none;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.btn-icon-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255,136,0,0.20);
+    color: #ff8800;
+    border-color: rgba(255,136,0,0.5);
+    background: rgba(255,136,0,0.08);
+}
+
+.btn-icon-edit:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(255,136,0,0.18);
+}
+
+.btn-icon-edit i {
+    font-size: 0.95em;
+}
+
+/* Icon button variants for different actions */
+.btn-icon-edit[title="Archive tenant"]:hover,
+button.btn-icon-edit[style*="color: #6b7280"]:hover {
+    color: #6b7280 !important;
+    border-color: #9ca3af;
+    background: rgba(107, 114, 128, 0.08);
+}
+
+.btn-icon-edit[title="Add payment"]:hover,
+a.btn-icon-edit[style*="color: #10b981"]:hover {
+    color: #10b981 !important;
+    border-color: rgba(16, 185, 129, 0.5);
+    background: rgba(16, 185, 129, 0.08);
+}
+
+.btn-icon-edit[title="View payment history"]:hover {
+    color: #3b82f6 !important;
+    border-color: rgba(59, 130, 246, 0.5);
+    background: rgba(59, 130, 246, 0.08);
+}
+
+/* Ensure form buttons styled as icon buttons */
+button.btn-icon-edit {
+    border: 1.5px solid #e5e7eb;
+    background: #ffffff;
+    padding: 0;
+}
+
+button.btn-icon-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(24,24,24,0.10);
+}
+
+/* Disabled icon buttons */
+.btn-icon-disabled {
+    pointer-events: none !important;
+    opacity: 0.55 !important;
+    cursor: not-allowed !important;
+    color: #9ca3af !important;
+    background: #ffffff !important;
+    border-color: #e5e7eb !important;
+    box-shadow: none !important;
+}
+
+a.btn-icon-disabled,
+button.btn-icon-disabled {
+    pointer-events: none !important;
+}
+
+a.btn-icon-disabled:hover,
+button.btn-icon-disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+
+/* See Details Button - Modern Design (hover state is now default) */
+.btn-see-details, .see-details-hover {
+    border: 1.5px solid #ff8800;
+    color: #ffffff;
+    background: linear-gradient(135deg, #ff8800, #ff6b00);
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 0.9em;
+    letter-spacing: .3px;
+    transition: all .3s ease;
+    position: relative;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(255, 136, 0, 0.25);
+}
+
+.btn-see-details::after, .see-details-hover::after {
+    content: '\2192';
+    font-size: 0.9em;
+    margin-left: 8px;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity .3s ease, transform .3s ease;
+}
+
+.btn-see-details:hover, .see-details-hover:hover {
+    background: linear-gradient(135deg, #ff8800, #ff6b00);
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(255, 136, 0, 0.35);
+    transform: translateY(-2px) scale(1.05);
+    border-color: transparent;
+    text-decoration: none;
+    padding: 0.5rem 1.2rem;
+}
+
+.btn-see-details:hover::after, .see-details-hover:hover::after {
+    opacity: 1;
+    transform: translateX(4px);
+}
+
+.btn-see-details:active, .see-details-hover:active {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 4px 12px rgba(255, 136, 0, 0.25);
+}
+
+.btn-see-details:focus, .see-details-hover:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(255,136,0,0.18);
+}
+
+/* Admin Icon Button - Subtle Design */
+.admin-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.admin-icon-btn:hover {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.admin-icon-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}

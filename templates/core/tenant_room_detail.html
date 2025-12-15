@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Room {{ room.room_number }} - RENTRIX{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Room {{ room.room_number }}</h1>
+            <a href="javascript:history.back()" class="btn-back-arrow" title="Back">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Room Information -->
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Room Information</h5>
+                <div class="icon-bubble">
+                    <i class="fas fa-door-open icon-accent"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="text-muted fs-6">Room</div>
+                    <div class="accent-number">{{ room.room_number }}</div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <div class="text-muted">Capacity</div>
+                    <span class="badge badge-accent">{{ room.current_occupants }}/{{ room.capacity }}</span>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="text-muted">Status</div>
+                    <span class="status-{{ room.status }}">
+                        {% if room.status == 'vacant' %}Available{% else %}Full{% endif %}
+                    </span>
+                </div>
+
+                <hr class="my-3 accent-divider">
+
+                <div class="small text-muted d-flex flex-column gap-1">
+                    <div>
+                        <i class="far fa-calendar-plus me-2 icon-accent"></i>
+                        Created {{ room.created_at|date:"F d, Y" }}
+                    </div>
+                    <div>
+                        <i class="far fa-clock me-2 icon-accent"></i>
+                        Updated {{ room.updated_at|date:"F d, Y" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Tenants -->
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="icon-bubble small">
+                        <i class="fas fa-users icon-accent"></i>
+                    </div>
+                    <h5 class="mb-0">Current Tenants</h5>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if tenants %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-muted fw-semibold">Name</th>
+                                    <th class="text-muted fw-semibold">Email</th>
+                                    <th class="text-muted fw-semibold">Move-in Date</th>
+                                    <th class="text-muted fw-semibold">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tenant in tenants %}
+                                <tr {% if tenant.tenant == request.user %}class="table-info"{% endif %}>
+                                    <td>
+                                        {{ tenant.tenant.get_full_name|default:tenant.tenant.username }}
+                                        {% if tenant.tenant == request.user %}
+                                            <span class="badge bg-primary ms-2">You</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ tenant.tenant.email }}</td>
+                                    <td>{{ tenant.move_in_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        <span class="badge status-{{ tenant.status }}">
+                                            {{ tenant.status|title }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No tenants currently assigned to this room.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

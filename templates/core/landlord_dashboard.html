@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Landlord Dashboard - RENTRIX{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4 text-dark">Landlord Dashboard</h1>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Total Rooms Card -->
+    <div class="col-md-4">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <div class="text-muted fs-6">Overview</div>
+                        <h4 class="card-title mb-0 text-dark">Total Rooms</h4>
+                    </div>
+                    <div class="icon-bubble">
+                        <i class="fas fa-door-open icon-accent fs-4"></i>
+                    </div>
+                </div>
+                <div class="d-flex align-items-baseline gap-2 mb-3">
+                    <span class="accent-number">{{ total_rooms }}</span>
+                    <span class="text-muted fs-6">rooms</span>
+                </div>
+                <hr class="my-3 accent-divider">
+                <a href="{% url 'room_list' %}" class="btn btn-primary">View Rooms</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Tenants Card -->
+    <div class="col-md-4">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <div class="text-muted fs-6">Currently</div>
+                        <h4 class="card-title mb-0 text-dark">Active Tenants</h4>
+                    </div>
+                    <div class="icon-bubble">
+                        <i class="fas fa-users icon-accent fs-4"></i>
+                    </div>
+                </div>
+                <div class="d-flex align-items-baseline gap-2 mb-3">
+                    <span class="accent-number">{{ total_tenants }}</span>
+                    <span class="text-muted fs-6">tenants</span>
+                </div>
+                <hr class="my-3 accent-divider">
+                <a href="{% url 'tenant_list' %}" class="btn btn-primary">View Tenants</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Payments Card -->
+    <div class="col-md-4">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <div class="text-muted fs-6">Cumulative</div>
+                        <h4 class="card-title mb-0 text-dark">Total Payments</h4>
+                    </div>
+                    <div class="icon-bubble">
+                        <i class="fas fa-money-bill-wave icon-accent fs-4"></i>
+                    </div>
+                </div>
+                <div class="d-flex align-items-baseline gap-2 mb-3">
+                    <span class="accent-number">{{ total_payments }}</span>
+                    <span class="text-muted fs-6">paid</span>
+                </div>
+                <hr class="my-3 accent-divider">
+                <a href="{% url 'payment_tracking' %}" class="btn btn-primary">Payment Tracking</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Payments -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card dashboard-card">
+            <div class="card-header bg-white card-header-accent">
+                <h5 class="mb-0">Recent Payments</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_payments %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Receipt No.</th>
+                                    <th>Tenant</th>
+                                    <th>Room</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for payment in recent_payments %}
+                                <tr>
+                                    <td>{{ payment.receipt_number }}</td>
+                                    <td>{{ payment.tenant.get_full_name }}</td>
+                                    <td>{{ payment.room.room_number }}</td>
+                                    <td>₱{{ payment.amount }}</td>
+                                    <td>{{ payment.payment_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        <span class="badge status-{{ payment.status }}">
+                                            {{ payment.status|title }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No recent payments found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

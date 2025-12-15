@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Archived Tenants - RENTRIX{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 d-flex justify-content-between align-items-center mb-4">
+        <h1>Archived Tenants</h1>
+        <a href="javascript:history.back()" class="btn-back-arrow" title="Back">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        {% if tenants %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Previous Room</th>
+                            <th>Move-in Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tenant in tenants %}
+                        <tr>
+                            <td>{{ tenant.tenant.get_full_name }}</td>
+                            <td>{{ tenant.tenant.email }}</td>
+                            <td>{{ tenant.room.room_number }}</td>
+                            <td>{{ tenant.move_in_date|date:"M d, Y" }}</td>
+                            <td>
+                                <span class="badge status-{{ tenant.status }}">{{ tenant.status|title }}</span>
+                            </td>
+                            <td>
+                                <a href="{% url 'tenant_payment_history' tenant.tenant.id %}" class="btn btn-sm btn-secondary" title="View payment history">
+                                    <i class="fas fa-history"></i> View payment history
+                                </a>
+                                <a href="{% url 'roomtenant_restore' tenant.id %}" class="btn btn-sm btn-primary ms-2">
+                                    <i class="fas fa-undo"></i> Restore
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted">No archived tenants.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+

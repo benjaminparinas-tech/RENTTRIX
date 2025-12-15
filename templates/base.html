@@ -1,0 +1,577 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}RENTRIX{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Remove underlines from all links */
+        a {
+            text-decoration: none !important;
+        }
+        a:hover {
+            text-decoration: none !important;
+        }
+        
+        /* Navbar specific styles */
+        .nav-divider {
+            display: none;
+            width: 1px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.15);
+            margin: 0 12px;
+        }
+        @media (min-width: 992px) {
+            .nav-divider { display: block; }
+        }
+        .nav-link {
+            text-decoration: none !important;
+            position: relative;
+            padding: 0.5rem 1rem;
+            color: rgba(255, 255, 255, 0.9) !important;
+            transition: color 0.2s ease, background-color 0.2s ease;
+            border-radius: 10px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #ff8800;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            text-decoration: none !important;
+            color: white !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: white !important;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Dark mode nav styles */
+        [data-bs-theme="dark"] .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        [data-bs-theme="dark"] .nav-link:hover {
+            color: white !important;
+        }
+
+        [data-bs-theme="dark"] .nav-link.active {
+            color: white !important;
+        }
+        
+        /* Brand logo styles */
+        .brand-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .brand-text {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 1.6em;
+            letter-spacing: 0.5px;
+            text-transform: none;
+            background: linear-gradient(45deg, #ffb26a, #ff8800 35%, #ff6b00 75%, #ff5000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            text-shadow: 0 2px 10px rgba(255, 136, 0, 0.35);
+        }
+
+        .brand-logo::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #ff8800, #ff6b00);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .brand-logo:hover {
+            background: transparent;
+        }
+
+        .brand-logo:hover::after {
+            width: 0;
+        }
+
+        .brand-icon {
+            color: #ff8800;
+            font-size: 1.5em;
+            filter: drop-shadow(0 2px 8px rgba(255, 136, 0, 0.25));
+        }
+        
+        /* Navbar scroll behavior */
+        .navbar {
+            transition: transform 0.3s ease;
+            border-radius: 0;
+            
+        }
+        .navbar.hidden {
+            transform: translateY(-100%);
+        }
+        
+        /* Button hover styles */
+        .btn {
+            text-decoration: none !important;
+        }
+        .btn:hover {
+            text-decoration: none !important;
+        }
+
+        /* Dark mode removed */
+
+        /* Footer styles */
+        .footer {
+            border-radius: 0;
+            margin-top: auto;
+        }
+
+        /* Search bar styles - modern, pill-shaped with integrated icon + clear button */
+        .search-container {
+            position: relative;
+            margin-right: 0.5rem; /* tighter */
+            width: 220px;
+            transition: width 0.25s ease;
+        }
+
+        .search-container.expanded {
+            width: 360px;
+        }
+
+        .search-inner {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0,0,0,0.10); /* slightly lighter, minimalist */
+            border-radius: 999px;
+            padding: 6px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: none;
+        }
+
+        .search-input {
+            background: transparent;
+            border: none;
+            color: white;
+            flex: 1 1 auto;
+            min-width: 0;
+            padding: 6px 8px;
+            transition: width 0.2s ease, background 0.2s ease;
+            outline: none;
+            font-size: 0.95rem;
+            border-radius: 999px;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 400;
+        }
+
+        .search-input:hover {
+            background: rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-input:focus {
+            width: 320px;
+            background: rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 136, 0, 0.5);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .search-icon {
+            color: #ff8800; /* accent color, minimalist */
+            font-size: 0.95rem;
+            flex: 0 0 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 4px;
+        }
+
+        .search-clear {
+            background: rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.95);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.12s ease, transform 0.1s ease;
+            flex: 0 0 24px;
+            opacity: 0.95;
+        }
+
+        .search-clear:hover { background: rgba(255,255,255,0.07); transform: scale(1.02); }
+
+        /* Theme toggle removed */
+
+        /* Search results dropdown - RENTRIX Orange Accent Theme */
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(17,24,39,0.08);
+            border-top: 2px solid rgba(255, 136, 0, 0.06);
+            border-radius: 10px;
+            margin-top: 6px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+            padding: 6px 0;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-result-item {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+            border-bottom: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 8px;
+            margin: 4px 6px;
+            outline: none;
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-item:hover,
+        .search-result-item:focus,
+        .search-result-item.focused {
+            background: rgba(255, 136, 0, 0.06);
+            color: #fff;
+            padding-left: 12px;
+            border-left: 2px solid rgba(255, 136, 0, 0.9);
+            padding-left: 14px;
+        }
+
+        .search-result-item .fw-semibold {
+            color: inherit;
+        }
+
+        .search-result-item .text-muted {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+    </style>
+</head>
+<body>
+    {% if not request.resolver_match.url_name == 'account_login' and not request.resolver_match.url_name == 'account_signup' %}
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(45deg, #ff8800, #ff6b00);">
+        <div class="container">
+            <a class="brand-logo" href="{% if user.is_staff %}{% url 'landlord_dashboard' %}{% else %}{% url 'tenant_dashboard' %}{% endif %}">
+                <i class="fas fa-cubes brand-icon"></i>
+                <span class="brand-text">renTTrix</span>
+            </a>
+            <span class="nav-divider"></span>
+            {% if not request.resolver_match.url_name == 'account_login' and not request.resolver_match.url_name == 'account_signup' %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    {% if user.is_staff %}
+                    <!-- Landlord Navigation -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'landlord_dashboard' %}active{% endif %}" href="{% url 'landlord_dashboard' %}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'room_list' %}active{% endif %}" href="{% url 'room_list' %}">
+                            <i class="fas fa-door-open"></i> Rooms
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'tenant_list' %}active{% endif %}" href="{% url 'tenant_list' %}">
+                            <i class="fas fa-users"></i> Tenants
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'payment_tracking' %}active{% endif %}" href="{% url 'payment_tracking' %}">
+                            <i class="fas fa-money-bill-wave"></i> Payments
+                        </a>
+                    </li>
+                    {% else %}
+                    <!-- Tenant Navigation -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'tenant_dashboard' %}active{% endif %}" href="{% url 'tenant_dashboard' %}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'tenant_room_list' %}active{% endif %}" href="{% url 'tenant_room_list' %}">
+                            <i class="fas fa-door-open"></i> Rooms
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'tenant_payment_tracker' %}active{% endif %}" href="{% url 'tenant_payment_tracker' %}">
+                            <i class="fas fa-money-bill-wave"></i> Payment Tracker
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="search-container" id="searchContainer" role="combobox" aria-haspopup="listbox" aria-owns="searchResults" aria-expanded="false">
+                        <div class="search-inner">
+                            <div class="search-icon" aria-hidden="true"><i class="fas fa-search"></i></div>
+                            <input type="text" class="search-input" placeholder="Search..." id="searchInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-autocomplete="list" aria-controls="searchResults">
+                            <button type="button" class="search-clear" id="searchClear" aria-label="Clear search" hidden><i class="fas fa-times" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="search-results" id="searchResults" role="listbox"></div>
+                    </div>
+                    {% if user.is_staff %}
+                    <a class="admin-icon-btn ms-2" href="{% url 'admin:index' %}" target="_blank" title="Django Admin">
+                        <i class="fas fa-cog"></i>
+                    </a>
+                    {% endif %}
+                    <a class="nav-link ms-3" href="{% url 'account_logout' %}">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+    {% endif %}
+
+    <main class="container py-4">
+        <div id="toastContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 2000;">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="toast ren-toast ren-{{ message.tags }} mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">{{ message }}</div>
+                            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% if not request.resolver_match.url_name == 'account_login' and not request.resolver_match.url_name == 'account_signup' %}
+    <footer class="footer mt-auto py-2">
+        <div class="container text-center">
+            <span class="text-white fs-6"><span class="text-accent">RENTTRIX</span> | CSC 107 Software Engineering Project</span>
+        </div>
+    </footer>
+    {% endif %}
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let lastScrollTop = 0;
+        const navbar = document.querySelector('.navbar');
+        const scrollThreshold = 50;
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
+                navbar.classList.add('hidden');
+            } else {
+                navbar.classList.remove('hidden');
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+
+        // Dark mode removed
+
+        // Search input reference (suggestions disabled)
+        const searchContainer = document.getElementById('searchContainer');
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const searchClear = document.getElementById('searchClear');
+        if (searchResults) { searchResults.classList.remove('active'); searchResults.innerHTML = ''; }
+
+        if (searchInput) {
+        // Prefill search input on listing pages (if q is defined)
+        const currentQ = '{{ q|default:"" }}';
+        const activeUrlName = '{{ request.resolver_match.url_name|default:"" }}';
+        if (currentQ && (activeUrlName === 'tenant_list' || activeUrlName === 'room_list')) {
+            searchInput.value = currentQ;
+        }
+
+        // Search suggestions (live) and filter on Enter
+        let debounceTimer;
+        const setExpanded = (isExpanded) => {
+            if (isExpanded) { searchContainer.classList.add('expanded'); searchContainer.setAttribute('aria-expanded', 'true'); }
+            else { searchContainer.classList.remove('expanded'); searchContainer.setAttribute('aria-expanded', 'false'); }
+        };
+
+        // Clear button behavior
+        if (searchClear) {
+            searchClear.addEventListener('click', () => {
+                searchInput.value = '';
+                searchResults.classList.remove('active');
+                searchResults.innerHTML = '';
+                searchClear.hidden = true;
+                setExpanded(false);
+                searchInput.focus();
+            });
+        }
+
+        // Search icon click focuses the input
+        const searchIconEl = searchContainer.querySelector('.search-icon');
+        if (searchIconEl) { searchIconEl.addEventListener('click', () => { searchInput.focus(); }); }
+
+        searchInput.addEventListener('input', (e) => {
+            const val = searchInput.value.trim();
+            if (searchClear) { searchClear.hidden = (val.length === 0); }
+            if (val.length < 2) {
+                searchResults.classList.remove('active');
+                searchResults.innerHTML = '';
+                return;
+            }
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                fetch(`/api/search/?q=${encodeURIComponent(val)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        searchResults.innerHTML = '';
+                        if (!Array.isArray(data) || data.length === 0) {
+                            searchResults.classList.remove('active');
+                            return;
+                        }
+                        data.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'search-result-item d-flex align-items-center gap-2';
+                            div.innerHTML = `<i class="fas ${item.icon} me-2"></i><div class="flex-fill"><div class="fw-semibold">${item.title}</div><div class="text-muted small">${item.type}</div></div>`;
+                            div.tabIndex = 0;
+                            div.setAttribute('role', 'option');
+                            div.addEventListener('keydown', (ke) => {
+                                if (ke.key === 'Enter') { window.location.href = item.url; }
+                                if (ke.key === 'ArrowDown') { ke.preventDefault(); const next = div.nextElementSibling; if (next) next.focus(); }
+                                if (ke.key === 'ArrowUp') { ke.preventDefault(); const prev = div.previousElementSibling; if (prev) prev.focus(); else searchInput.focus(); }
+                            });
+                            div.addEventListener('focus', () => { div.classList.add('focused'); div.setAttribute('aria-selected', 'true'); });
+                            div.addEventListener('blur', () => { div.classList.remove('focused'); div.setAttribute('aria-selected', 'false'); });
+                            div.addEventListener('click', () => { window.location.href = item.url; });
+                            searchResults.appendChild(div);
+                        });
+                        searchResults.classList.add('active');
+                        setExpanded(true);
+                    })
+                    .catch(err => {
+                        console.error('Search API error', err);
+                        searchResults.classList.remove('active');
+                        searchResults.innerHTML = '';
+                    });
+            }, 220);
+        });
+
+        // Close suggestions on blur (with small timeout to allow click); manage expanded state
+        searchInput.addEventListener('focus', () => { setExpanded(true); });
+        searchInput.addEventListener('blur', () => { setTimeout(() => { searchResults.classList.remove('active'); setExpanded(false); }, 200); });
+
+        // allow arrow navigation and Enter to navigate to first result; Escape to clear/close
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const first = searchResults.querySelector('.search-result-item');
+                if (first) { first.focus(); }
+            }
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                searchResults.classList.remove('active');
+                searchResults.innerHTML = '';
+                if (searchClear) searchClear.hidden = true;
+                setExpanded(false);
+            }
+        });
+
+        } // end if searchInput
+
+        // Press Enter to filter current listing page
+        if (searchInput) {
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const term = searchInput.value.trim();
+                if (term.length === 0) {
+                    return;
+                }
+                // Determine context: tenants or rooms; default to tenants
+                if (activeUrlName === 'tenant_list') {
+                    window.location.href = `/tenants/?q=${encodeURIComponent(term)}`;
+                } else if (activeUrlName === 'room_list') {
+                    window.location.href = `/rooms/?q=${encodeURIComponent(term)}`;
+                } else {
+                    window.location.href = `/tenants/?q=${encodeURIComponent(term)}`;
+                }
+            }
+        });
+        }
+
+        // Initialize toast notifications from Django messages
+        document.addEventListener('DOMContentLoaded', () => {
+            const toastEls = document.querySelectorAll('#toastContainer .toast');
+            toastEls.forEach(el => {
+                try {
+                    const t = new bootstrap.Toast(el, { delay: 4200 });
+                    t.show();
+                } catch (e) { /* bootstrap not available? ignore */ }
+            });
+        });
+    </script>
+</body>
+</html> 

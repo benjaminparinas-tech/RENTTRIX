@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Payments - RENTRIX{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Payments</h1>
+            <a href="{% url 'tenant_list' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Payment (Select Tenant)
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        {% if payments %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tenant</th>
+                            <th>Room</th>
+                            <th>Amount</th>
+                            <th>Payment Month</th>
+                            <th>Payment Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment in payments %}
+                        <tr>
+                            <td>{{ payment.tenant.get_full_name }}</td>
+                            <td>{{ payment.room.room_number }}</td>
+                            <td>₱{{ payment.amount }}</td>
+                            <td>{{ payment.payment_month|date:"F Y" }}</td>
+                            <td>{{ payment.payment_date|date:"M d, Y" }}</td>
+                            <td>
+                                <span class="badge status-{{ payment.status }}">
+                                    {{ payment.status|title }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'payment_edit' payment.id %}" class="btn-icon-edit" title="Edit payment">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted">No payments found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

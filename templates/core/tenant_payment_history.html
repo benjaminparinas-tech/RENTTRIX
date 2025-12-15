@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ tenant.get_full_name }} - Payment History - RENTRIX{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Payment History for {{ tenant.get_full_name }}</h1>
+            <a href="javascript:history.back()" class="btn-back-arrow" title="Back">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        {% if payments %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Receipt No.</th>
+                            <th>Room</th>
+                            <th>Amount</th>
+                            <th>Payment Month</th>
+                            <th>Date Paid</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment in payments %}
+                        <tr>
+                            <td>{{ payment.receipt_number }}</td>
+                            <td>{{ payment.room.room_number }}</td>
+                            <td>₱{{ payment.amount }}</td>
+                            <td>{{ payment.payment_month|date:"F Y" }}</td>
+                            <td>{{ payment.payment_date|date:"M d, Y" }}</td>
+                            <td>
+                                <span class="badge status-{{ payment.status }}">
+                                    {{ payment.status|title }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if payment.status == 'paid' %}
+                                    <a href="{% url 'download_receipt' payment.receipt.id %}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-download"></i> Download Receipt
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted">No payment history found for this tenant.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 
