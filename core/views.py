@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.http import HttpResponse, JsonResponse, Http404
 from django.template.loader import render_to_string
+from django.conf import settings  # <-- Added this import for PDF fix
 from weasyprint import HTML
 from decimal import Decimal
 from .models import Room, RoomTenant, Payment, Receipt, LandlordProfile, AddOn
@@ -410,7 +411,9 @@ def download_receipt(request, receipt_id):
     
     # Generate PDF
     html_string = render_to_string('core/receipt_template.html', {'receipt': receipt})
-    pdf = HTML(string=html_string).write_pdf()
+    
+    # --- RENTRIX FIX: Added base_url for Docker/Render PDF generation ---
+    pdf = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
     
     # Create response
     response = HttpResponse(pdf, content_type='application/pdf')
