@@ -1,36 +1,31 @@
-# 1. Use Python 3.11 as the base
+# Use Python 3.11 slim image
 FROM python:3.11-slim
 
-# 2. Install the system tools needed for WeasyPrint (PDFs)
+# Install system dependencies for WeasyPrint (PDFs)
+# We removed 'python3-pip' and others that caused the crash
 RUN apt-get update && apt-get install -y \
     build-essential \
-    python3-dev \
-    python3-pip \
-    python3-setuptools \
-    python3-wheel \
-    python3-cffi \
+    libffi-dev \
     libcairo2 \
     libpango-1.0-0 \
     libpangocairo-1.0-0 \
     libgdk-pixbuf2.0-0 \
-    libffi-dev \
     shared-mime-info \
     && rm -rf /var/lib/apt/lists/*
 
-# 3. Set up the working folder
+# Set up the workspace
 WORKDIR /app
 
-# 4. Copy and install your Python libraries
+# Copy requirements and install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5. Copy the rest of your code
+# Copy the project files
 COPY . .
 
-# 6. Collect static files (CSS)
-# We use a dummy key here just for the build process
+# Collect static files
+# We use a dummy key because the real one is only needed at runtime
 RUN SECRET_KEY=dummy python manage.py collectstatic --noinput --clear
 
-# 7. Start the server
-# RENTRIX NOTE: We bind to port 10000 which Render expects
+# Start the server on port 10000
 CMD ["gunicorn", "rentrix.wsgi", "--bind", "0.0.0.0:10000"]
